@@ -30,6 +30,7 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             NameValueCollection folders = ConfigurationManager.GetSection("folders") as NameValueCollection;
+            JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
 
             if (!(folders is null))
             {
@@ -40,16 +41,18 @@ namespace ConsoleApp1
                     {
                         ProcessDirectory(strFolder);
 
-                        JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
                         string json = jsonSerialiser.Serialize(myFiles);
 
                         File.WriteAllText(strFolder + @"\myJosn.json", json);
                     }
                     else
                     {
-                        Console.WriteLine($"Folder: {strFolder} does not exist");
+                        WriteLog($"Folder: {strFolder} does not exist");
                     }
                 }
+
+                string completeJson = jsonSerialiser.Serialize(myFiles);
+                File.WriteAllText("c:" + @"\myJosn.json", completeJson);
             }
 
             Console.WriteLine("Press any key...");
@@ -85,12 +88,18 @@ namespace ConsoleApp1
                     myFiles.Add(new MyObjectInJson { FileName = path, Latitude = location.Latitude, Longitude = location.Longitude });
                 }
 
-                Console.WriteLine("Processed file '{0}'.", path);
+                WriteLog($"Processed file '{path}'.");
             } 
             catch (Exception e)
             {
-                Console.WriteLine($"Error extracting GPS location: {e}, file: {path}") ;
+                WriteLog($"Error extracting GPS location: {e}, file: {path}") ;
             }
+        }
+
+        public static void WriteLog(string msg)
+        {
+            Console.WriteLine(msg);
+            File.AppendAllText("log.txt", msg);
         }
 
     }

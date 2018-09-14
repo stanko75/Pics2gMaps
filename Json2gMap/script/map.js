@@ -6,7 +6,7 @@ $.getJSON("myJosn.json", function (data) {
     mapOptions = {
         zoom: 6,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-        center: { lat: 50.74388888888889, lng: 7.1522222222222229},		
+        center: { lat: 50.74388888888889, lng: 7.1522222222222229}
     };
 		
 	mapCanvas = document.getElementById('map-canvas');
