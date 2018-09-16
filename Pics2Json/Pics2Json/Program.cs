@@ -2,8 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
@@ -29,51 +27,62 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            NameValueCollection folders = ConfigurationManager.GetSection("folders") as NameValueCollection;
-            JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
-
-            if (!(folders is null))
+            try
             {
-                foreach (string folder in folders)
+                NameValueCollection folders = ConfigurationManager.GetSection("folders") as NameValueCollection;
+                JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
+
+                if (!(folders is null))
                 {
-                    string strFolder = folders.Get(folder);
-                    if (Directory.Exists(strFolder))
+                    foreach (string config in folders)
                     {
-                        ProcessDirectory(strFolder);
+                        string[] configs = folders.Get(config).Split(';');
+                        string strFolder = configs[0];
+                        string webPath = configs[1];
+                        string jsonFilename = configs[2];
 
-                        string json = jsonSerialiser.Serialize(myFiles);
+                        if (Directory.Exists(strFolder))
+                        {
+                            ProcessDirectory(strFolder, webPath);
 
-                        File.WriteAllText(strFolder + @"\myJosn.json", json);
+                            string json = jsonSerialiser.Serialize(myFiles);
+
+                            File.WriteAllText(Path.Combine(strFolder, jsonFilename), json);
+                        }
+                        else
+                        {
+                            WriteLog($"Folder: {strFolder} does not exist");
+                        }
                     }
-                    else
-                    {
-                        WriteLog($"Folder: {strFolder} does not exist");
-                    }
+
+                    string completeJson = jsonSerialiser.Serialize(myFiles);
+                    File.WriteAllText("c:" + @"\myJosn.json", completeJson);
                 }
-
-                string completeJson = jsonSerialiser.Serialize(myFiles);
-                File.WriteAllText("c:" + @"\myJosn.json", completeJson);
+            }
+            catch (Exception e)
+            {
+                WriteLog($"Error: {e.Message}");
             }
 
             Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
 
-        public static void ProcessDirectory(string targetDirectory)
+        public static void ProcessDirectory(string targetDirectory, string webPath)
         {
             // Process the list of files found in the directory.
             string[] fileEntries = Directory.GetFiles(targetDirectory);
             foreach (string fileName in fileEntries)
-                ProcessFile(fileName);
+                ProcessFile(fileName, webPath);
 
             // Recurse into subdirectories of this directory.
             string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
             foreach (string subdirectory in subdirectoryEntries)
-                ProcessDirectory(subdirectory);
+                ProcessDirectory(subdirectory, webPath);
         }
 
         // Insert logic for processing found files here.
-        public static void ProcessFile(string path)
+        public static void ProcessFile(string path, string webPath)
         {
             try
             {
@@ -83,9 +92,17 @@ namespace ConsoleApp1
 
                 GeoLocation location = gps?.GetGeoLocation();
 
+                if (!webPath.EndsWith("/"))
+                {
+                    webPath = webPath + '/';
+                }
+
+                Uri baseUri = new Uri(webPath);
+                Uri mainUri = new Uri(baseUri, Path.GetFileName(path));
+
                 if (!(location is null))
                 {
-                    myFiles.Add(new MyObjectInJson { FileName = path, Latitude = location.Latitude, Longitude = location.Longitude });
+                    myFiles.Add(new MyObjectInJson { FileName = mainUri.AbsoluteUri, Latitude = location.Latitude, Longitude = location.Longitude });
                 }
 
                 WriteLog($"Processed file '{path}'.");
@@ -99,7 +116,15 @@ namespace ConsoleApp1
         public static void WriteLog(string msg)
         {
             Console.WriteLine(msg);
-            File.AppendAllText("log.txt", msg);
+
+            try
+            {
+                File.AppendAllText("log.txt", msg);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error saving log file: {e.Message}");
+            }
         }
 
     }
