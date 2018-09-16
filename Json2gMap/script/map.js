@@ -16,15 +16,17 @@ $.getJSON("myJosn.json", function (data) {
 	
 		
 	data.forEach(function(file) {
-	var myLatlng = new google.maps.LatLng(file.Latitude, file.Longitude);		
-		
-
+		var myLatlng = new google.maps.LatLng(file.Latitude, file.Longitude);		
 	
 		var marker = new google.maps.Marker({
 			position: myLatlng,
 			map: map,
-			title: file.FileName
+			title: file.FileName,
+			url: file.FileName
 		});
+		
+		marker.addListener('click', function() {
+			window.open(marker.url,"_target")
+        });			
     })
-        //document.write("tesrt");
 });
