@@ -1,4 +1,4 @@
-$.getJSON("myJosn.json", function (data) {
+$.getJSON("/*picsJson*/", function (data) {
 	var mapOptions,
         mapCanvas,
         map;
