@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="lib/jquery-3.3.1.js"></script>
+	</head>
+	<body>
+		<img id="jPreview" src="20170924_151820.jpg" width=200 length=200/>
+	</body>
+	<script>
+		var i = 0;
+		jQuery.getJSON("altenahr.json", function (data) {
+			setInterval(function () {
+				jQuery("#jPreview").attr("src", data[i].FileName);						
+				jQuery("#jPreview").on("load", function () {
+					i = i + 1;
+					if (i >= data.length) {
+						i = 0;
+					}
+				});
+			}, 1000)
+		});
+	</script>
+</html>
