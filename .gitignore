@@ -331,3 +331,6 @@ ASALocalRun/
 *.config
 *.jpg
 *.json
+test2019/www/index.html
+test2019/www/lib/jquery-3.3.1.js
+test2019/www/script/map.js

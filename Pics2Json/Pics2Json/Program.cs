@@ -10,7 +10,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
-using static System.Net.Mime.MediaTypeNames;
+using System.Drawing.Drawing2D;
 
 //using System.Object;
 
@@ -45,6 +45,7 @@ namespace ConsoleApp1
           {
             string[] configs = folders.Get(config).Split(';');
             string galleryName = configs[0];
+            string strThumbnailsFolder = Path.Combine($"{configs[1]}{galleryName}", "thumbs");
             string strPicFolder = Path.Combine($"{configs[1]}{galleryName}", "pics");
             string wwwFolder = Path.Combine($"{configs[1]}{galleryName}", "www");
             string webPath = $"{configs[2]}{galleryName}/pics";
@@ -54,7 +55,7 @@ namespace ConsoleApp1
 
             if (Directory.Exists(strPicFolder))
             {
-              ProcessDirectory(strPicFolder, webPath);
+              ProcessDirectory(strPicFolder, webPath, strThumbnailsFolder);
 
               string json = jsonSerialiser.Serialize(myFiles);
 
@@ -118,25 +119,30 @@ namespace ConsoleApp1
 
       string jqueryName = "jquery-3.3.1.js";
 
-      File.Copy(Path.Combine(libTemplatePath, jqueryName), Path.Combine(libFolder, jqueryName));
+      File.Copy(Path.Combine(libTemplatePath, jqueryName), Path.Combine(libFolder, jqueryName), true);
     }
 
-    public static void ProcessDirectory(string targetDirectory, string webPath)
+    public static void ProcessDirectory(string targetDirectory, string webPath, string strThumbnailsFolder)
     {
       // Process the list of files found in the directory.
       string[] fileEntries = Directory.GetFiles(targetDirectory);
       foreach (string fileName in fileEntries)
-        ProcessFile(fileName, webPath);
+        ProcessFile(fileName, webPath, strThumbnailsFolder);
 
       // Recurse into subdirectories of this directory.
       string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
       foreach (string subdirectory in subdirectoryEntries)
-        ProcessDirectory(subdirectory, webPath);
+        ProcessDirectory(subdirectory, webPath, strThumbnailsFolder);
     }
 
     // Insert logic for processing found files here.
-    public static void ProcessFile(string path, string webPath)
+    public static void ProcessFile(string path, string webPath, string strThumbnailsFolder)
     {
+      if (!Directory.Exists(strThumbnailsFolder))
+        Directory.CreateDirectory(strThumbnailsFolder);
+
+      ResizeImage(path, new Size(200, 200), Path.Combine(strThumbnailsFolder, Path.GetFileName(path)));
+
       try
       {
         IReadOnlyList<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(path);
@@ -166,23 +172,83 @@ namespace ConsoleApp1
       }
     }
 
-
-    public void ResizeImage(
+    public static void ResizeImage(
       string fileName,
       Size size,
       string newFn,
       bool preserveAspectRatio = true)
     {
-      using (var bmpInput = System.Drawing.Image.FromFile(fileName))
+      try
       {
-        using (var bmpOutput = new Bitmap(bmpInput, size))
+        using (var bmpInput = Image.FromFile(fileName))
         {
-          foreach (var id in bmpInput.PropertyIdList)
-            bmpOutput.SetPropertyItem(bmpInput.GetPropertyItem(id));
-          bmpOutput.SetResolution(300.0f, 300.0f);
-          bmpOutput.Save(newFn, ImageFormat.Jpeg);
+          using (var bmpOutput = new Bitmap(bmpInput, size))
+          {
+
+            resizeImage(fileName, newFn, 200, 200, bmpInput.Width, bmpInput.Height);
+
+            foreach (var id in bmpInput.PropertyIdList)
+              bmpOutput.SetPropertyItem(bmpInput.GetPropertyItem(id));
+            bmpOutput.SetResolution(300.0f, 300.0f);
+            bmpOutput.Save(newFn, ImageFormat.Jpeg);
+          }
         }
+        //WriteLog($"Thumbnail from file: {fileName} created in {newFn}");
       }
+      catch (Exception e)
+      {
+        WriteLog($"Error creating thumbnail: {e.Message}");
+      }
+    }
+
+    private static void resizeImage(string originalFilename, string saveTo,
+                         /* note changed names */
+                         int canvasWidth, int canvasHeight,
+                         /* new */
+                         int originalWidth, int originalHeight)
+    {
+      Image image = Image.FromFile(originalFilename);
+
+      System.Drawing.Image thumbnail =
+          new Bitmap(canvasWidth, canvasHeight); // changed parm names
+      System.Drawing.Graphics graphic =
+                   System.Drawing.Graphics.FromImage(thumbnail);
+
+      graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+      graphic.SmoothingMode = SmoothingMode.HighQuality;
+      graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+      graphic.CompositingQuality = CompositingQuality.HighQuality;
+
+      /* ------------------ new code --------------- */
+
+      // Figure out the ratio
+      double ratioX = (double)canvasWidth / (double)originalWidth;
+      double ratioY = (double)canvasHeight / (double)originalHeight;
+      // use whichever multiplier is smaller
+      double ratio = ratioX < ratioY ? ratioX : ratioY;
+
+      // now we can get the new height and width
+      int newHeight = Convert.ToInt32(originalHeight * ratio);
+      int newWidth = Convert.ToInt32(originalWidth * ratio);
+
+      // Now calculate the X,Y position of the upper-left corner 
+      // (one of these will always be zero)
+      int posX = Convert.ToInt32((canvasWidth - (originalWidth * ratio)) / 2);
+      int posY = Convert.ToInt32((canvasHeight - (originalHeight * ratio)) / 2);
+
+      graphic.Clear(Color.White); // white padding
+      graphic.DrawImage(image, posX, posY, newWidth, newHeight);
+
+      /* ------------- end new code ---------------- */
+
+      System.Drawing.Imaging.ImageCodecInfo[] info =
+                       ImageCodecInfo.GetImageEncoders();
+      EncoderParameters encoderParameters;
+      encoderParameters = new EncoderParameters(1);
+      encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality,
+                       100L);
+      thumbnail.Save(saveTo, info[1],
+                       encoderParameters);
     }
 
     public static void WriteLog(string msg)
@@ -191,7 +257,7 @@ namespace ConsoleApp1
 
       try
       {
-        File.AppendAllText("log.txt", msg);
+        File.AppendAllText("log.txt", msg + Environment.NewLine);
       }
       catch (Exception e)
       {
