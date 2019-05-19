@@ -8,7 +8,9 @@ using MetadataExtractor.Formats.Exif;
 using Directory = System.IO.Directory;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Reflection;
+using System.Drawing;
+using System.Drawing.Imaging;
+using static System.Net.Mime.MediaTypeNames;
 
 //using System.Object;
 
@@ -161,6 +163,25 @@ namespace ConsoleApp1
       catch (Exception e)
       {
         WriteLog($"Error extracting GPS location: {e}, file: {path}");
+      }
+    }
+
+
+    public void ResizeImage(
+      string fileName,
+      Size size,
+      string newFn,
+      bool preserveAspectRatio = true)
+    {
+      using (var bmpInput = System.Drawing.Image.FromFile(fileName))
+      {
+        using (var bmpOutput = new Bitmap(bmpInput, size))
+        {
+          foreach (var id in bmpInput.PropertyIdList)
+            bmpOutput.SetPropertyItem(bmpInput.GetPropertyItem(id));
+          bmpOutput.SetResolution(300.0f, 300.0f);
+          bmpOutput.Save(newFn, ImageFormat.Jpeg);
+        }
       }
     }
 
