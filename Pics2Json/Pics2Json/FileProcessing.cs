@@ -72,5 +72,47 @@ namespace Pics2Json
         log.WriteLog($"Error extracting GPS location: {e}, file: {path}");
       }
     }
+
+    public void PrepareTemplates(string wwwFolder, string galleryName)
+    {
+      string templatePath = $"..\\..\\..\\..\\Json2gMap\\";
+
+      //index.html
+      string indexName = "index.html";
+      string indexHtmlPath = $"{templatePath}{indexName}";
+      string indexHtml = File.ReadAllText(indexHtmlPath);
+      indexHtml = indexHtml.Replace("/*galleryName*/", galleryName);
+
+      if (!System.IO.Directory.Exists(wwwFolder))
+        System.IO.Directory.CreateDirectory(wwwFolder);
+
+      File.WriteAllText(Path.Combine(wwwFolder, indexName), indexHtml);
+
+      //script\map.js
+      string scriptFolderName = "script";
+      string mapJsName = $"map.js";
+      string scriptTemplatePath = Path.Combine(templatePath, scriptFolderName);
+      string mapJsPath = Path.Combine(scriptTemplatePath, mapJsName);
+      string mapJs = File.ReadAllText(mapJsPath);
+      mapJs = mapJs.Replace("/*picsJson*/", $"{galleryName}.json");
+
+      string scriptFolder = Path.Combine(wwwFolder, scriptFolderName);
+      if (!System.IO.Directory.Exists(scriptFolder))
+        System.IO.Directory.CreateDirectory(scriptFolder);
+
+      File.WriteAllText(Path.Combine(scriptFolder, mapJsName), mapJs);
+
+      //copy lib folder
+      string libName = "lib";
+      string libFolder = Path.Combine(wwwFolder, libName);
+      if (!System.IO.Directory.Exists(libFolder))
+        System.IO.Directory.CreateDirectory(libFolder);
+
+      string libTemplatePath = Path.Combine(templatePath, libName);
+
+      string jqueryName = "jquery-3.3.1.js";
+
+      File.Copy(Path.Combine(libTemplatePath, jqueryName), Path.Combine(libFolder, jqueryName), true);
+    }
   }
 }
