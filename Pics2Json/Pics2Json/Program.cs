@@ -41,11 +41,11 @@ namespace ConsoleApp1
             string webPath = $"{configs[2]}{galleryName}/pics";
             string jsonFilename = $"{galleryName}.json";
 
-            fileProcessing.PrepareTemplates(wwwFolder, galleryName);
+            fileProcessing.PrepareTemplates(wwwFolder, galleryName, log);
 
             if (Directory.Exists(strPicFolder))
             {
-              fileProcessing.ProcessDirectory(strPicFolder, webPath, strThumbnailsFolder, myFiles);
+              fileProcessing.ProcessDirectory(strPicFolder, webPath, strThumbnailsFolder, myFiles, log);
 
               string json = jsonSerialiser.Serialize(myFiles);
 

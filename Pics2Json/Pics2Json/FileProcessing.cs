@@ -17,21 +17,21 @@ namespace Pics2Json
       public double Longitude { get; set; }
     }
 
-    public void ProcessDirectory(string targetDirectory, string webPath, string strThumbnailsFolder, List<MyObjectInJson> myFiles)
+    public void ProcessDirectory(string targetDirectory, string webPath, string strThumbnailsFolder, List<MyObjectInJson> myFiles, Log log)
     {
       // Process the list of files found in the directory.
       string[] fileEntries = System.IO.Directory.GetFiles(targetDirectory);
       foreach (string fileName in fileEntries)
-        ProcessFile(fileName, webPath, strThumbnailsFolder, myFiles);
+        ProcessFile(fileName, webPath, strThumbnailsFolder, myFiles, log);
 
       // Recurse into subdirectories of this directory.
       string[] subdirectoryEntries = System.IO.Directory.GetDirectories(targetDirectory);
       foreach (string subdirectory in subdirectoryEntries)
-        ProcessDirectory(subdirectory, webPath, strThumbnailsFolder, myFiles);
+        ProcessDirectory(subdirectory, webPath, strThumbnailsFolder, myFiles, log);
     }
 
     // Insert logic for processing found files here.
-    public static void ProcessFile(string path, string webPath, string strThumbnailsFolder, List<MyObjectInJson> myFiles)
+    public static void ProcessFile(string path, string webPath, string strThumbnailsFolder, List<MyObjectInJson> myFiles, Log log)
     {
       if (!System.IO.Directory.Exists(strThumbnailsFolder))
         System.IO.Directory.CreateDirectory(strThumbnailsFolder);
@@ -41,8 +41,6 @@ namespace Pics2Json
       imagesProcessing.ResizeImage(path, Path.Combine(strThumbnailsFolder, Path.GetFileName(path)), 200, 200);
       //string thumbNailsFolder = Path.Combine(strThumbnailsFolder, Path.GetFileName(path));
       //imagesProcessing.Resize_Picture(path, thumbNailsFolder, 200, 200, 100);
-
-      Log log = new Log();
 
       try
       {
@@ -73,13 +71,13 @@ namespace Pics2Json
       }
     }
 
-    public void PrepareTemplates(string wwwFolder, string galleryName)
+    public void PrepareTemplates(string wwwFolder, string galleryName, Log log)
     {
-      string templatePath = $"..\\..\\..\\..\\Json2gMap\\";
+      string templatePath = $"Json2gMap";
 
       //index.html
       string indexName = "index.html";
-      string indexHtmlPath = $"{templatePath}{indexName}";
+      string indexHtmlPath = Path.Combine(templatePath, indexName);
       string indexHtml = File.ReadAllText(indexHtmlPath);
       indexHtml = indexHtml.Replace("/*galleryName*/", galleryName);
 
@@ -87,6 +85,7 @@ namespace Pics2Json
         System.IO.Directory.CreateDirectory(wwwFolder);
 
       File.WriteAllText(Path.Combine(wwwFolder, indexName), indexHtml);
+      log.WriteLog($"File {Path.Combine(wwwFolder, indexName)} saved.");
 
       //script\map.js
       string scriptFolderName = "script";
@@ -101,6 +100,7 @@ namespace Pics2Json
         System.IO.Directory.CreateDirectory(scriptFolder);
 
       File.WriteAllText(Path.Combine(scriptFolder, mapJsName), mapJs);
+      log.WriteLog($"File {Path.Combine(scriptFolder, mapJsName)} saved.");
 
       //copy lib folder
       string libName = "lib";
@@ -113,6 +113,7 @@ namespace Pics2Json
       string jqueryName = "jquery-3.3.1.js";
 
       File.Copy(Path.Combine(libTemplatePath, jqueryName), Path.Combine(libFolder, jqueryName), true);
+      log.WriteLog($"File {Path.Combine(libTemplatePath, jqueryName)} copied to: {Path.Combine(libFolder, jqueryName)}.");
     }
   }
 }
