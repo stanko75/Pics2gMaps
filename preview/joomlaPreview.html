@@ -7,7 +7,7 @@
 
 	<script>
 		var i = 0;
-		jQuery.getJSON("http://www.milosev.com/gallery/travelBuddies/www/travelBuddiesThumbs.json", function (data) {
+		jQuery.getJSON("/gallery/travelBuddies/www/travelBuddiesThumbs.json", function (data) {
 			setInterval(function () {
 				jQuery("#jPreview").attr("src", data[i].FileName);						
 				jQuery("#jPreview").on("load", function () {
