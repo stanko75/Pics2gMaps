@@ -83,6 +83,7 @@
     <Content Include="Json2gMap\script\map.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Json2gMap\script\thumbnails.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
