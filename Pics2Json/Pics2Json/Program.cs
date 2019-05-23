@@ -17,7 +17,8 @@ namespace ConsoleApp1
     static void Main(string[] args)
     {
       Log log = new Log();
-      List<FileProcessing.MyObjectInJson> myFiles = new List<FileProcessing.MyObjectInJson>();
+      List<FileProcessing.MyObjectInJson> picsJson = new List<FileProcessing.MyObjectInJson>();
+      List<FileProcessing.MyObjectInJson> thumbsJson = new List<FileProcessing.MyObjectInJson>();
 
       try
       {
@@ -38,18 +39,22 @@ namespace ConsoleApp1
             string strThumbnailsFolder = Path.Combine($"{configs[1]}{galleryName}", "thumbs");
             string strPicFolder = Path.Combine($"{configs[1]}{galleryName}", "pics");
             string wwwFolder = Path.Combine($"{configs[1]}{galleryName}", "www");
-            string webPath = $"{configs[2]}{galleryName}/pics";
+            string webPath = $"{configs[2]}{galleryName}";
             string jsonFilename = $"{galleryName}.json";
+            string jsonThumbsFilename = $"{galleryName}Thumbs.json";
 
             fileProcessing.PrepareTemplates(wwwFolder, galleryName, log);
 
             if (Directory.Exists(strPicFolder))
             {
-              fileProcessing.ProcessDirectory(strPicFolder, webPath, strThumbnailsFolder, myFiles, log);
+              fileProcessing.ProcessDirectory(strPicFolder, webPath, strThumbnailsFolder, picsJson, thumbsJson, log);
 
-              string json = jsonSerialiser.Serialize(myFiles);
+              string json = jsonSerialiser.Serialize(picsJson);
 
               File.WriteAllText(Path.Combine(wwwFolder, jsonFilename), json);
+
+              json = jsonSerialiser.Serialize(thumbsJson);
+              File.WriteAllText(Path.Combine(wwwFolder, jsonThumbsFilename), json);
             }
             else
             {

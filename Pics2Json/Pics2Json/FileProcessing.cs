@@ -17,21 +17,21 @@ namespace Pics2Json
       public double Longitude { get; set; }
     }
 
-    public void ProcessDirectory(string targetDirectory, string webPath, string strThumbnailsFolder, List<MyObjectInJson> myFiles, Log log)
+    public void ProcessDirectory(string targetDirectory, string webPath, string strThumbnailsFolder, List<MyObjectInJson> picsJson, List<MyObjectInJson> thumbsJson, Log log)
     {
       // Process the list of files found in the directory.
       string[] fileEntries = System.IO.Directory.GetFiles(targetDirectory);
       foreach (string fileName in fileEntries)
-        ProcessFile(fileName, webPath, strThumbnailsFolder, myFiles, log);
+        ProcessFile(fileName, webPath, strThumbnailsFolder, picsJson, thumbsJson, log);
 
       // Recurse into subdirectories of this directory.
       string[] subdirectoryEntries = System.IO.Directory.GetDirectories(targetDirectory);
       foreach (string subdirectory in subdirectoryEntries)
-        ProcessDirectory(subdirectory, webPath, strThumbnailsFolder, myFiles, log);
+        ProcessDirectory(subdirectory, webPath, strThumbnailsFolder, picsJson, thumbsJson, log);
     }
 
     // Insert logic for processing found files here.
-    public static void ProcessFile(string path, string webPath, string strThumbnailsFolder, List<MyObjectInJson> myFiles, Log log)
+    public static void ProcessFile(string path, string webPath, string strThumbnailsFolder, List<MyObjectInJson> picsJson, List<MyObjectInJson> thumbsJson, Log log)
     {
       if (!System.IO.Directory.Exists(strThumbnailsFolder))
         System.IO.Directory.CreateDirectory(strThumbnailsFolder);
@@ -55,12 +55,19 @@ namespace Pics2Json
           webPath = webPath + '/';
         }
 
-        Uri baseUri = new Uri(webPath);
-        Uri mainUri = new Uri(baseUri, Path.GetFileName(path));
+        string picsPath = $"{webPath}pics/";
+        string thumbsPath = $"{webPath}thumbs/";
+
+        Uri picsUri = new Uri(picsPath);
+        Uri mainPicsUri = new Uri(picsUri, Path.GetFileName(path));
+
+        Uri thumbsUri = new Uri(thumbsPath);
+        Uri mainThumbsUri = new Uri(thumbsUri, Path.GetFileName(path));
 
         if (!(location is null))
         {
-          myFiles.Add(new MyObjectInJson { FileName = mainUri.AbsoluteUri, Latitude = location.Latitude, Longitude = location.Longitude });
+          picsJson.Add(new MyObjectInJson { FileName = mainPicsUri.AbsolutePath, Latitude = location.Latitude, Longitude = location.Longitude });
+          thumbsJson.Add(new MyObjectInJson { FileName = mainThumbsUri.AbsolutePath, Latitude = location.Latitude, Longitude = location.Longitude });
         }
 
         log.WriteLog($"Processed file '{path}'.");
