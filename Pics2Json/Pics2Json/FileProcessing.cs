@@ -90,10 +90,15 @@ namespace Pics2Json
       //script\map.js
       string scriptFolderName = "script";
       string mapJsName = $"map.js";
+      string thumbnailsJsName = $"thumbnails.js";
       string scriptTemplatePath = Path.Combine(templatePath, scriptFolderName);
       string mapJsPath = Path.Combine(scriptTemplatePath, mapJsName);
+      string thumbnailsJsPath = Path.Combine(scriptTemplatePath, thumbnailsJsName);
       string mapJs = File.ReadAllText(mapJsPath);
       mapJs = mapJs.Replace("/*picsJson*/", $"{galleryName}.json");
+
+      string thumbnailsJs = File.ReadAllText(thumbnailsJsPath);
+      thumbnailsJs = thumbnailsJs.Replace("/*picsJson*/", $"{galleryName}");
 
       string scriptFolder = Path.Combine(wwwFolder, scriptFolderName);
       if (!System.IO.Directory.Exists(scriptFolder))
@@ -101,6 +106,9 @@ namespace Pics2Json
 
       File.WriteAllText(Path.Combine(scriptFolder, mapJsName), mapJs);
       log.WriteLog($"File {Path.Combine(scriptFolder, mapJsName)} saved.");
+
+      File.WriteAllText(Path.Combine(scriptFolder, thumbnailsJsName), thumbnailsJs);
+      log.WriteLog($"File {Path.Combine(scriptFolder, thumbnailsJsName)} saved.");
 
       //copy lib folder
       string libName = "lib";
