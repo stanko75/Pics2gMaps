@@ -3,6 +3,14 @@ $.getJSON("/*picsJson*/", function (data) {
         mapCanvas,
         map;
 
+    if (typeof google !== 'object')// && typeof google.maps !== 'object')
+    {
+        setTimeout(function () {
+            // debugger;
+            location.reload();
+        }, 1000);
+    }
+
     mapOptions = {
         zoom: 6,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
