@@ -3,10 +3,9 @@ $.getJSON("/*picsJson*/", function (data) {
         mapCanvas,
         map;
 
-    if (typeof google !== 'object')// && typeof google.maps !== 'object')
+    if (typeof google !== 'object')
     {
         setTimeout(function () {
-            // debugger;
             location.reload();
         }, 1000);
     }
