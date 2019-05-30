@@ -129,6 +129,10 @@ namespace Pics2Json
 
       File.Copy(Path.Combine(libTemplatePath, jqueryName), Path.Combine(libFolder, jqueryName), true);
       log.WriteLog($"File {Path.Combine(libTemplatePath, jqueryName)} copied to: {Path.Combine(libFolder, jqueryName)}.");
+
+      string namespacesJs = "namespaces.js";
+      File.Copy(Path.Combine(scriptTemplatePath, namespacesJs), Path.Combine(scriptFolder, namespacesJs), true);
+      log.WriteLog($"File {Path.Combine(scriptTemplatePath, namespacesJs)} copied to: {Path.Combine(scriptTemplatePath, namespacesJs)}.");
     }
   }
 }
