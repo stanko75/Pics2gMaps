@@ -20,7 +20,6 @@ $.getJSON("/*picsJson*/", function (data) {
     if (!map) {
         map = new google.maps.Map(mapCanvas, mapOptions);
 	}
-	
 		
 	data.forEach(function(file) {
 		var myLatlng = new google.maps.LatLng(file.Latitude, file.Longitude);		
