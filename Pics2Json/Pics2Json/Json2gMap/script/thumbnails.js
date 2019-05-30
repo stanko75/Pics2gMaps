@@ -1,11 +1,14 @@
-function zoomMap(x) {
-    debugger;
-}
-
 $.getJSON("/*picsJson*/Thumbs.json", function (data) {
 	var thumbs;
 	thumbs = $('#thumbnails');
-	data.forEach(function(file) {
-        $('#thumbnails').append('<img onmouseover = "zoomMap(this)" src="' + file.FileName + '">');
+    data.forEach(function (val, key) {
+        thumbs.append('<img onmouseover = "zoomMap(this)" src="' + val.FileName + '">');
+        thumbs.append('<img id="' + key + '"' + ' src=' + val.FileName + ">");
+        thumbs.on('mouseover', '#' + key, function () {
+            window.milosev.map.setZoom(20);
+        })
+        thumbs.on('mouseout', '#' + key, function () {
+            window.milosev.map.setZoom(15);
+        })		
 	})
 })

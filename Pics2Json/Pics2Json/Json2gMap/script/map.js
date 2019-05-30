@@ -5,7 +5,6 @@
 
     $.getJSON("/*picsJson*/", function (data) {
 
-
         if (typeof google !== 'object') {
             setTimeout(function () {
                 location.reload();
