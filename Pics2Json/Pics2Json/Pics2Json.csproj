@@ -86,6 +86,9 @@
     <Content Include="Json2gMap\script\namespaces.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Json2gMap\script\pics2maps.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Json2gMap\script\thumbnails.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

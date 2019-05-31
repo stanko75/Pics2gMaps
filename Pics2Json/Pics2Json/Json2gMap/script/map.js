@@ -1,43 +1,23 @@
 (function (ns) {
-    var mapOptions,
-        mapCanvas,
-        map;
+    /*globals google, map*/
+    "use strict";
+    var map;
 
-    $.getJSON("/*picsJson*/", function (data) {
-
+    setTimeout(function () {
         if (typeof google !== 'object') {
-            setTimeout(function () {
-                location.reload();
-            }, 1000);
+            location.reload();
         }
+    }, 1000);
 
-        mapOptions = {
-            zoom: 6,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            center: { lat: 50.74388888888889, lng: 7.1522222222222229 }
-        };
-
-        mapCanvas = document.getElementById('map-canvas');
-        if (!map) {
-            map = new google.maps.Map(mapCanvas, mapOptions);
-        }
-
-        data.forEach(function (file) {
-            var myLatlng = new google.maps.LatLng(file.Latitude, file.Longitude);
-
-            var marker = new google.maps.Marker({
-                position: myLatlng,
-                map: map,
-                title: file.FileName,
-                url: file.FileName
-            });
-
-            marker.addListener('click', function () {
-                window.open(marker.url, "_target")
-            });
-        })
-
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+            center: { lat: 34.397, lng: 150.644 },
+            scrollwheel: false,
+            zoom: 2
+        });
         ns.map = map;
+    }
 
-    });
+    ns.initMap = initMap;
+
 })(window.milosev);

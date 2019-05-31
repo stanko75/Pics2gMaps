@@ -3,33 +3,34 @@
 
 <head>
     <meta property="og:title" content="Maps of places" />
-    <meta property="og:url" content="http://www.milosev.com/gallery//*galleryName*//www/index.html" />
+    <meta property="og:url" content="http://www.milosev.com/gallery/djala/www/index.html" />
     <meta property="og:image" content="http://www.milosev.com/gallery/20180911_202614.jpg" />
     <meta property="fb:app_id" content="2128533190490272" />
     <meta property="og:description" content="List of places which I visited, for time being without pictures." />
-    <script type="text/javascript" src="lib/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="script/namespaces.js"></script>
-    <script type="text/javascript" src="script/map.js"></script>
-    <script type="text/javascript" src="script/thumbnails.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC96EGKbYxxIadYOGTozj8NdD0F5CIYM4&callback=initMap"></script>
+    <script defer type="text/javascript" src="lib/jquery-3.3.1.js"></script>
+    <script defer type="text/javascript" src="script/namespaces.js"></script>
+    <script defer type="text/javascript" src="script/map.js"></script>
+    <script defer type="text/javascript" src="script/pics2Maps.js"></script>
+    <script defer type="text/javascript" src="script/thumbnails.js"></script>
+    <script defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC96EGKbYxxIadYOGTozj8NdD0F5CIYM4&callback=window.milosev.initMap"></script>
 
 </head>
-	
-    <body>
-        <div id="map-canvas" style="width: 50%; height: 100%; float: left"></div>
-        <div id="thumbnails" style="width: 50%; height: 100%; float: left; overflow: auto"></div>
-        <style>
-            html, body, #map-canvas {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
 
-            #map_canvas {
-                position: relative;
-            }
-        </style>
-    </body>
-	
+<body>
+    <div id="map-canvas" style="width: 50%; height: 100%; float: left"></div>
+    <div id="thumbnails" style="width: 50%; height: 100%; float: left; overflow: auto"></div>
+    <style>
+        html, body, #map-canvas {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map_canvas {
+            position: relative;
+        }
+    </style>
+</body>
+
 </html>
