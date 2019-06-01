@@ -2,7 +2,14 @@
 	/*globals google, $*/
 	"use strict";
     $.getJSON("/*picsJson*/.json", function (data) {
-		data.forEach(function (file) { 
+        data.forEach(function (file) { 
+
+            setTimeout(function () {
+                if (typeof google !== 'object') {
+                    location.reload();
+                }
+            }, 1000);
+
 			var picsLatLng = new google.maps.LatLng(file.Latitude, file.Longitude);
 			var bounds = new google.maps.LatLngBounds();
 		
