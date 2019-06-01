@@ -22,7 +22,22 @@
                 }
             });
             thumbs.on('click', '#' + key, function () {
-                clicked = !clicked;
+                //$('table[style*="width: 555px"]')
+                if (clicked && $('#' + key).css('borderWidth').toLowerCase() == '14px') {
+                    clicked = false;
+                    $('#' + key).css("border", "");
+                    ns.map.setZoom(15);
+                }
+                else {
+                    clicked = true;
+                }
+
+                if (clicked) {
+                    $('img[style*="border: 14px"]').css("border", "");
+                    $('#' + key).css("border", "14px solid #333");
+                    ns.map.setZoom(20);
+                    ns.map.setCenter(new google.maps.LatLng(val.Latitude, val.Longitude), 13);
+                }
             });
         });
         ns.map.setZoom(15);
