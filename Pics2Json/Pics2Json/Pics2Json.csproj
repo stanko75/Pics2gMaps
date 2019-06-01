@@ -68,6 +68,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Json2gMap\css\index.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Json2gMap\fbExample.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

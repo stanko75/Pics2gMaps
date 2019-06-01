@@ -139,6 +139,18 @@ namespace Pics2Json
       File.Copy(Path.Combine(libTemplatePath, jqueryName), Path.Combine(libFolder, jqueryName), true);
       log.WriteLog($"File {Path.Combine(libTemplatePath, jqueryName)} copied to: {Path.Combine(libFolder, jqueryName)}.");
 
+      string cssName = "css";
+      string cssFolder = Path.Combine(wwwFolder, cssName);
+      if (!System.IO.Directory.Exists(cssFolder))
+        System.IO.Directory.CreateDirectory(cssFolder);
+
+      string cssTemplatePath = Path.Combine(templatePath, cssName);
+
+      string indexCssName = "index.css";
+
+      File.Copy(Path.Combine(cssTemplatePath, indexCssName), Path.Combine(cssFolder, indexCssName), true);
+      log.WriteLog($"File {Path.Combine(cssTemplatePath, indexCssName)} copied to: {Path.Combine(cssFolder, indexCssName)}.");
+
       string namespacesJs = "namespaces.js";
       File.Copy(Path.Combine(scriptTemplatePath, namespacesJs), Path.Combine(scriptFolder, namespacesJs), true);
       log.WriteLog($"File {Path.Combine(scriptTemplatePath, namespacesJs)} copied to: {Path.Combine(scriptTemplatePath, namespacesJs)}.");
