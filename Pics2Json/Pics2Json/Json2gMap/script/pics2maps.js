@@ -4,21 +4,25 @@
     $.getJSON("/*picsJson*/.json", function (data) {
         data.forEach(function (file) { 
 
-            setTimeout(function () {
-                if (typeof google !== 'object') {
-                    location.reload();
-                }
-            }, 1000);
+            try {
+                var picsLatLng = new google.maps.LatLng(file.Latitude, file.Longitude);
+                var bounds = new google.maps.LatLngBounds();
 
-			var picsLatLng = new google.maps.LatLng(file.Latitude, file.Longitude);
-			var bounds = new google.maps.LatLngBounds();
-		
-			var marker = new google.maps.Marker({
-				position: picsLatLng,
-				map: ns.map,
-				title: file.FileName,
-				url: file.FileName
-			});
+                var marker = new google.maps.Marker({
+                    position: picsLatLng,
+                    map: ns.map,
+                    title: file.FileName,
+                    url: file.FileName
+                });
+            }
+            catch (e) {
+                console.log(e);
+                setTimeout(function () {
+                    if (typeof google !== 'object') {
+                        location.reload();
+                    }
+                }, 1000);
+            }
 
 			marker.addListener('click', function () {
 				window.open(marker.url, "_target");
