@@ -2,6 +2,7 @@
 using MetadataExtractor.Formats.Exif;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -87,6 +88,10 @@ namespace Pics2Json
       string indexHtmlPath = Path.Combine(templatePath, indexName);
       string indexHtml = File.ReadAllText(indexHtmlPath);
       indexHtml = indexHtml.Replace("/*galleryName*/", galleryName);
+
+      string gapikey = ConfigurationManager.AppSettings.Get("gapikey");
+
+      indexHtml = indexHtml.Replace("/*gapikey*/", gapikey);
 
       if (!System.IO.Directory.Exists(wwwFolder))
         System.IO.Directory.CreateDirectory(wwwFolder);
