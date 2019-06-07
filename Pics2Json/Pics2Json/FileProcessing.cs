@@ -11,6 +11,8 @@ namespace Pics2Json
 {
   class FileProcessing
   {
+    string templatePath = $"Json2gMap";
+
     public class MyObjectInJson
     {
       public string FileName { get; set; }
@@ -79,86 +81,64 @@ namespace Pics2Json
       }
     }
 
+    private void ReplaceHtml(string replaceKey
+      , string replaceString
+      , string fileName
+      , string origPath
+      , string saveToPath
+      , Log log
+    )
+    {
+      if (!string.IsNullOrWhiteSpace(origPath))
+        origPath = Path.Combine(templatePath, origPath);
+      else
+        origPath = templatePath;
+
+      string origFileNameWithPath = Path.Combine(origPath, fileName);
+      string fileContent = File.ReadAllText(origFileNameWithPath);
+
+      fileContent = fileContent.Replace(replaceKey, replaceString);
+
+      if (!System.IO.Directory.Exists(saveToPath))
+        System.IO.Directory.CreateDirectory(saveToPath);
+
+      string saveToFileNameWithPath = Path.Combine(saveToPath, fileName);
+
+      File.WriteAllText(saveToFileNameWithPath, fileContent);
+      log.WriteLog($"File {saveToFileNameWithPath} saved.");
+    }
+
+    private void CopyFile(string fileName, string origFolder, string saveToPath, Log log)
+    {
+      saveToPath = Path.Combine(saveToPath, origFolder);
+      origFolder = Path.Combine(templatePath, origFolder);
+
+      string saveToFileNameWithPath = Path.Combine(saveToPath, fileName);
+      string saveOrigFileNameWithPath = Path.Combine(origFolder, fileName);
+
+      if (!System.IO.Directory.Exists(saveToPath))
+        System.IO.Directory.CreateDirectory(saveToPath);
+
+      File.Copy(saveOrigFileNameWithPath, saveToFileNameWithPath, true);
+
+      log.WriteLog($"File {saveOrigFileNameWithPath} copied to: {saveToFileNameWithPath}.");
+    }
+
     public void PrepareTemplates(string wwwFolder, string galleryName, Log log)
     {
-      string templatePath = $"Json2gMap";
-
-      //index.html
-      string indexName = "index.html";
-      string indexHtmlPath = Path.Combine(templatePath, indexName);
-      string indexHtml = File.ReadAllText(indexHtmlPath);
-      indexHtml = indexHtml.Replace("/*galleryName*/", galleryName);
-
       string gapikey = ConfigurationManager.AppSettings.Get("gapikey");
+      string scriptsFolder = Path.Combine(wwwFolder, "script");
 
-      indexHtml = indexHtml.Replace("/*gapikey*/", gapikey);
+      ReplaceHtml("/*galleryName*/", galleryName, "index.html", string.Empty, wwwFolder, log);
+      ReplaceHtml("/*gapikey*/", gapikey, "index.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*picsJson*/", $"{galleryName}", "thumbnails.js", "script", scriptsFolder, log);
+      ReplaceHtml("/*picsJson*/", $"{galleryName}", "pics2maps.js", "script", scriptsFolder, log);
 
-      if (!System.IO.Directory.Exists(wwwFolder))
-        System.IO.Directory.CreateDirectory(wwwFolder);
+      CopyFile("jquery-3.3.1.js", "lib", wwwFolder, log);
+      CopyFile("index.css", "css", wwwFolder, log);
 
-      File.WriteAllText(Path.Combine(wwwFolder, indexName), indexHtml);
-      log.WriteLog($"File {Path.Combine(wwwFolder, indexName)} saved.");
-
-      //script\map.js
-      string scriptFolderName = "script";
-      string mapJsName = $"map.js";
-      string thumbnailsJsName = $"thumbnails.js";
-      string pics2mapsJsName = $"pics2maps.js";
-
-      string scriptTemplatePath = Path.Combine(templatePath, scriptFolderName);
-      string mapJsPath = Path.Combine(scriptTemplatePath, mapJsName);
-      string thumbnailsJsPath = Path.Combine(scriptTemplatePath, thumbnailsJsName);
-      string pics2mapsPath = Path.Combine(scriptTemplatePath, pics2mapsJsName);
-      string mapJs = File.ReadAllText(mapJsPath);
-      mapJs = mapJs.Replace("/*picsJson*/", $"{galleryName}.json");
-
-      string thumbnailsJs = File.ReadAllText(thumbnailsJsPath);
-      thumbnailsJs = thumbnailsJs.Replace("/*picsJson*/", $"{galleryName}");
-
-      string pics2mapsJs = File.ReadAllText(pics2mapsPath);
-      pics2mapsJs = pics2mapsJs.Replace("/*picsJson*/", $"{galleryName}");
-
-      string scriptFolder = Path.Combine(wwwFolder, scriptFolderName);
-      if (!System.IO.Directory.Exists(scriptFolder))
-        System.IO.Directory.CreateDirectory(scriptFolder);
-
-      File.WriteAllText(Path.Combine(scriptFolder, mapJsName), mapJs);
-      log.WriteLog($"File {Path.Combine(scriptFolder, mapJsName)} saved.");
-
-      File.WriteAllText(Path.Combine(scriptFolder, thumbnailsJsName), thumbnailsJs);
-      log.WriteLog($"File {Path.Combine(scriptFolder, thumbnailsJsName)} saved.");
-
-      File.WriteAllText(Path.Combine(scriptFolder, pics2mapsJsName), pics2mapsJs);
-      log.WriteLog($"File {Path.Combine(scriptFolder, pics2mapsJsName)} saved.");
-
-      //copy lib folder
-      string libName = "lib";
-      string libFolder = Path.Combine(wwwFolder, libName);
-      if (!System.IO.Directory.Exists(libFolder))
-        System.IO.Directory.CreateDirectory(libFolder);
-
-      string libTemplatePath = Path.Combine(templatePath, libName);
-
-      string jqueryName = "jquery-3.3.1.js";
-
-      File.Copy(Path.Combine(libTemplatePath, jqueryName), Path.Combine(libFolder, jqueryName), true);
-      log.WriteLog($"File {Path.Combine(libTemplatePath, jqueryName)} copied to: {Path.Combine(libFolder, jqueryName)}.");
-
-      string cssName = "css";
-      string cssFolder = Path.Combine(wwwFolder, cssName);
-      if (!System.IO.Directory.Exists(cssFolder))
-        System.IO.Directory.CreateDirectory(cssFolder);
-
-      string cssTemplatePath = Path.Combine(templatePath, cssName);
-
-      string indexCssName = "index.css";
-
-      File.Copy(Path.Combine(cssTemplatePath, indexCssName), Path.Combine(cssFolder, indexCssName), true);
-      log.WriteLog($"File {Path.Combine(cssTemplatePath, indexCssName)} copied to: {Path.Combine(cssFolder, indexCssName)}.");
-
-      string namespacesJs = "namespaces.js";
-      File.Copy(Path.Combine(scriptTemplatePath, namespacesJs), Path.Combine(scriptFolder, namespacesJs), true);
-      log.WriteLog($"File {Path.Combine(scriptTemplatePath, namespacesJs)} copied to: {Path.Combine(scriptTemplatePath, namespacesJs)}.");
+      CopyFile("namespaces.js", "script", wwwFolder, log);
+      CopyFile("map.js", "script", wwwFolder, log);
     }
   }
 }
