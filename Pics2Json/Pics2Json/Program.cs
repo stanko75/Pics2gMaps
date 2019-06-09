@@ -38,6 +38,7 @@ namespace ConsoleApp1
             string rootGalleryFolder = setting.RootGalleryFolder;
             string ogTitle = setting.OgTitle;
             string ogDescription = setting.OgDescription;
+            string ogImage = setting.OgImage;
 
             string strThumbnailsFolder = Path.Combine($"{rootGalleryFolder}{galleryName}", "thumbs");
             string strPicFolder = Path.Combine($"{rootGalleryFolder}{galleryName}", "pics");
@@ -47,7 +48,7 @@ namespace ConsoleApp1
             string jsonFilename = $"{galleryName}.json";
             string jsonThumbsFilename = $"{galleryName}Thumbs.json";
 
-            fileProcessing.PrepareTemplates(wwwFolder, galleryName, ogTitle, ogDescription, log);
+            fileProcessing.PrepareTemplates(wwwFolder, galleryName, ogTitle, ogDescription, ogImage, webPath, log);
 
             if (Directory.Exists(strPicFolder))
             {

@@ -124,7 +124,14 @@ namespace Pics2Json
       log.WriteLog($"File {saveOrigFileNameWithPath} copied to: {saveToFileNameWithPath}.");
     }
 
-    public void PrepareTemplates(string wwwFolder, string galleryName, string ogTitle, string ogDescription, Log log)
+    public void PrepareTemplates(string wwwFolder
+      , string galleryName
+      , string ogTitle
+      , string ogDescription
+      , string ogImage
+      , string webPath
+      , Log log
+    )
     {
       string gapikey = ConfigurationManager.AppSettings.Get("gapikey");
       string scriptsFolder = Path.Combine(wwwFolder, "script");
@@ -133,6 +140,7 @@ namespace Pics2Json
       ReplaceHtml("/*gapikey*/", gapikey, "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*ogTitle*/", ogTitle, "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*ogDescription*/", ogDescription, "index.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*ogImage*/", $"{webPath}/pics/{ogImage}", "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*picsJson*/", $"{galleryName}", "thumbnails.js", "script", scriptsFolder, log);
       ReplaceHtml("/*picsJson*/", $"{galleryName}", "pics2maps.js", "script", scriptsFolder, log);
 
