@@ -47,6 +47,45 @@ namespace Pics2Json
         base["webPath"] = value;
       }
     }
+
+    [ConfigurationProperty("ogTitle", IsKey = true, IsRequired = true)]
+    public string OgTitle
+    {
+      get
+      {
+        return (string)base["ogTitle"];
+      }
+      set
+      {
+        base["ogTitle"] = value;
+      }
+    }
+
+    [ConfigurationProperty("ogDescription", IsKey = true, IsRequired = true)]
+    public string OgDescription
+    {
+      get
+      {
+        return (string)base["ogDescription"];
+      }
+      set
+      {
+        base["ogDescription"] = value;
+      }
+    }
+
+    [ConfigurationProperty("ogImage", IsKey = true, IsRequired = true)]
+    public string OgImage
+    {
+      get
+      {
+        return (string)base["ogImage"];
+      }
+      set
+      {
+        base["ogImage"] = value;
+      }
+    }
   }
 
   public class GallerySettingsElementCollection : ConfigurationElementCollection

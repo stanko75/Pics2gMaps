@@ -124,15 +124,19 @@ namespace Pics2Json
       log.WriteLog($"File {saveOrigFileNameWithPath} copied to: {saveToFileNameWithPath}.");
     }
 
-    public void PrepareTemplates(string wwwFolder, string galleryName, Log log)
+    public void PrepareTemplates(string wwwFolder, string galleryName, string ogTitle, string ogDescription, Log log)
     {
       string gapikey = ConfigurationManager.AppSettings.Get("gapikey");
       string scriptsFolder = Path.Combine(wwwFolder, "script");
 
       ReplaceHtml("/*galleryName*/", galleryName, "index.html", string.Empty, wwwFolder, log);
       ReplaceHtml("/*gapikey*/", gapikey, "index.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*ogTitle*/", ogTitle, "index.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*ogDescription*/", ogDescription, "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*picsJson*/", $"{galleryName}", "thumbnails.js", "script", scriptsFolder, log);
       ReplaceHtml("/*picsJson*/", $"{galleryName}", "pics2maps.js", "script", scriptsFolder, log);
+
+      ReplaceHtml("/*galleryName*/", galleryName, "joomlaPreview.html", string.Empty, wwwFolder, log);
 
       CopyFile("jquery-3.3.1.js", "lib", wwwFolder, log);
       CopyFile("index.css", "css", wwwFolder, log);
