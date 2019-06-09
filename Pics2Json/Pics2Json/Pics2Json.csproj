@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileProcessing.cs" />
+    <Compile Include="GallerySettings.cs" />
     <Compile Include="ImagesProcessing.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />

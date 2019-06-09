@@ -26,20 +26,21 @@ namespace ConsoleApp1
         //Console.Write("Enter path of folder where are pictures: ");
         //string strFolder = Console.ReadLine();
 
-        NameValueCollection folders = ConfigurationManager.GetSection("folders") as NameValueCollection;
+        GallerySettingsConfig galeries = (GallerySettingsConfig)ConfigurationManager.GetSection("galeries");
         JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
         FileProcessing fileProcessing = new FileProcessing();
 
-        if (!(folders is null))
+        if (!(galeries is null))
         {
-          foreach (string config in folders)
+          foreach (GallerySettingsElement setting in galeries.MilosevBlogInstances)
           {
-            string[] configs = folders.Get(config).Split(';');
-            string galleryName = configs[0];
-            string strThumbnailsFolder = Path.Combine($"{configs[1]}{galleryName}", "thumbs");
-            string strPicFolder = Path.Combine($"{configs[1]}{galleryName}", "pics");
-            string wwwFolder = Path.Combine($"{configs[1]}{galleryName}", "www");
-            string webPath = $"{configs[2]}{galleryName}";
+            string galleryName = setting.GalleryName;
+            string rootGalleryFolder = setting.RootGalleryFolder;
+            string strThumbnailsFolder = Path.Combine($"{rootGalleryFolder}{galleryName}", "thumbs");
+            string strPicFolder = Path.Combine($"{rootGalleryFolder}{galleryName}", "pics");
+
+            string wwwFolder = Path.Combine($"{rootGalleryFolder}{galleryName}", "www");
+            string webPath = $"{setting.WebPath}{galleryName}";
             string jsonFilename = $"{galleryName}.json";
             string jsonThumbsFilename = $"{galleryName}Thumbs.json";
 
@@ -61,9 +62,6 @@ namespace ConsoleApp1
               log.WriteLog($"Folder: {strPicFolder} does not exist");
             }
           }
-
-          //string completeJson = jsonSerialiser.Serialize(myFiles);
-          //File.WriteAllText("c:" + @"\myJosn.json", completeJson);
         }
       }
       catch (Exception e)
