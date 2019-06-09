@@ -13,6 +13,9 @@ App.Config should look like this:
       <add galleryName="Djala"
            rootGalleryFolder="C:\projects\gallery\"
            webPath="http://www.milosev.com/gallery/"
+           ogTitle="Đala - place where my father was born"
+           ogDescription="Few pictures of village from where my father came."
+           ogImage="IMAG0091.jpg"
       />
     </settings>
   </galeries>
