@@ -1,6 +1,6 @@
-# Pics2gMaps
 App.Config should look like this:
 
+```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 
