@@ -17,15 +17,9 @@ namespace ConsoleApp1
     static void Main(string[] args)
     {
       Log log = new Log();
-      List<FileProcessing.MyObjectInJson> picsJson = new List<FileProcessing.MyObjectInJson>();
-      List<FileProcessing.MyObjectInJson> thumbsJson = new List<FileProcessing.MyObjectInJson>();
 
       try
       {
-        //NameValueCollection folders = new NameValueCollection();
-        //Console.Write("Enter path of folder where are pictures: ");
-        //string strFolder = Console.ReadLine();
-
         GallerySettingsConfig galeries = (GallerySettingsConfig)ConfigurationManager.GetSection("galeries");
         JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
         FileProcessing fileProcessing = new FileProcessing();
@@ -34,37 +28,32 @@ namespace ConsoleApp1
         {
           foreach (GallerySettingsElement setting in galeries.MilosevBlogInstances)
           {
+            List<FileProcessing.MyObjectInJson> picsJson = new List<FileProcessing.MyObjectInJson>();
+            List<FileProcessing.MyObjectInJson> thumbsJson = new List<FileProcessing.MyObjectInJson>();
+
             string galleryName = setting.GalleryName;
             string rootGalleryFolder = setting.RootGalleryFolder;
             string ogTitle = setting.OgTitle;
             string ogDescription = setting.OgDescription;
             string ogImage = setting.OgImage;
 
-            string strThumbnailsFolder = Path.Combine($"{rootGalleryFolder}{galleryName}", "thumbs");
-            string strPicFolder = Path.Combine($"{rootGalleryFolder}{galleryName}", "pics");
+            string rootGalleryFolderWithGalleryName = Path.Combine(rootGalleryFolder, galleryName);
 
-            string wwwFolder = Path.Combine($"{rootGalleryFolder}{galleryName}", "www");
+            string wwwFolder = Path.Combine($"{rootGalleryFolderWithGalleryName}", "www");
             string webPath = $"{setting.WebPath}{galleryName}";
             string jsonFilename = $"{galleryName}.json";
             string jsonThumbsFilename = $"{galleryName}Thumbs.json";
 
             fileProcessing.PrepareTemplates(wwwFolder, galleryName, ogTitle, ogDescription, ogImage, webPath, log);
 
-            if (Directory.Exists(strPicFolder))
-            {
-              fileProcessing.ProcessDirectory(strPicFolder, webPath, strThumbnailsFolder, picsJson, thumbsJson, log);
+            fileProcessing.ProcessDirectory(galleryName, rootGalleryFolderWithGalleryName, webPath, picsJson, thumbsJson, log);
 
-              string json = jsonSerialiser.Serialize(picsJson);
+            string json = jsonSerialiser.Serialize(picsJson);
 
-              File.WriteAllText(Path.Combine(wwwFolder, jsonFilename), json);
+            File.WriteAllText(Path.Combine(wwwFolder, jsonFilename), json);
 
-              json = jsonSerialiser.Serialize(thumbsJson);
-              File.WriteAllText(Path.Combine(wwwFolder, jsonThumbsFilename), json);
-            }
-            else
-            {
-              log.WriteLog($"Folder: {strPicFolder} does not exist");
-            }
+            json = jsonSerialiser.Serialize(thumbsJson);
+            File.WriteAllText(Path.Combine(wwwFolder, jsonThumbsFilename), json);
           }
         }
       }
