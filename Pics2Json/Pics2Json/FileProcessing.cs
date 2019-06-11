@@ -181,8 +181,8 @@ namespace Pics2Json
       ReplaceHtml("/*gapikey*/", gapikey, "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*ogTitle*/", ogTitle, "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*ogDescription*/", ogDescription, "index.html", wwwFolder, wwwFolder, log);
-      ReplaceHtml("/*ogImage*/", $"{webPath}/pics/{ogImage}", "index.html", wwwFolder, wwwFolder, log);
-      ReplaceHtml("/*ogUrl*/", $"{webPath}/index.html", "index.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*ogImage*/", $"{webPath}/{ogImage}", "index.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*ogUrl*/", $"{webPath}/www/index.html", "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*picsJson*/", $"{galleryName}", "thumbnails.js", "script", scriptsFolder, log);
       ReplaceHtml("/*picsJson*/", $"{galleryName}", "pics2maps.js", "script", scriptsFolder, log);
 
