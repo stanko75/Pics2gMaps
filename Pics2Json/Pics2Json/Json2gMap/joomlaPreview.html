@@ -1,15 +1,15 @@
-<a href="http://www.milosev.com/gallery//*galleryName*//www/index.html" target="_blank">/*galleryName*/</a>
+<a href="/*joomlaImgSrcPath*/index.html" target="_blank">/*ogTitle*/</a>
 
-<script type="text/javascript" src="http://www.milosev.com/gallery//*galleryName*//www/lib/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="/*joomlaImgSrcPath*/lib/jquery-3.3.1.js"></script>
 <p/>
 
-<a href="http://www.milosev.com/gallery//*galleryName*//www/index.html" target="_blank"><img id="jPreview/*galleryName*/" src="http://www.milosev.com/gallery//*galleryName*//thumbs/IMAG0091.jpg" width=200 length=200/></a>
+<a href="/*joomlaImgSrcPath*/index.html" target="_blank"><img id="jPreview/*galleryName*/" src="/*joomlaImgSrcPath*/..//*ogImage*/" width=200 length=200/></a>
 
 	<script>
         var /*galleryName*/PicNo = 0;
-        jQuery.getJSON("/gallery//*galleryName*//www//*galleryName*/Thumbs.json", function (data) {
+        jQuery.getJSON("/*joomlaThumbsPath*/", function (data) {
 			setInterval(function () {
-                jQuery("#jPreview/*galleryName*/").attr("src", data[/*galleryName*/PicNo].FileName);						
+                jQuery("#jPreview/*galleryName*/").attr("src", "/*joomlaImgSrcPath*/" + data[/*galleryName*/PicNo].FileName);						
                 jQuery("#jPreview/*galleryName*/").on("load", function () {
 					/*galleryName*/PicNo = /*galleryName*/PicNo + 1;
                     if (/*galleryName*/PicNo >= data.length) {

@@ -25,7 +25,7 @@
                 var zoomChangeBoundsListener =
                     google.maps.event.addListenerOnce(ns.map, 'bounds_changed', function (event) {
                         if (ns.map.getZoom()) {
-                            ns.map.setZoom(14);  // set zoom here
+                            ns.map.setZoom(/*zoom*/);  // set zoom here
                         }
                     });
 

@@ -36,6 +36,9 @@ namespace ConsoleApp1
             string ogTitle = setting.OgTitle;
             string ogDescription = setting.OgDescription;
             string ogImage = setting.OgImage;
+            string zoom = setting.Zoom;
+            string joomlaThumbsPath = setting.JoomlaThumbsPath;
+            string joomlaImgSrcPath = setting.JoomlaImgSrcPath;
 
             string rootGalleryFolderWithGalleryName = Path.Combine(rootGalleryFolder, galleryName);
 
@@ -44,7 +47,7 @@ namespace ConsoleApp1
             string jsonFilename = $"{galleryName}.json";
             string jsonThumbsFilename = $"{galleryName}Thumbs.json";
 
-            fileProcessing.PrepareTemplates(wwwFolder, galleryName, ogTitle, ogDescription, ogImage, webPath, log);
+            fileProcessing.PrepareTemplates(wwwFolder, galleryName, ogTitle, ogDescription, ogImage, webPath, zoom, joomlaThumbsPath, joomlaImgSrcPath, log);
 
             fileProcessing.ProcessDirectory(galleryName, rootGalleryFolderWithGalleryName, webPath, picsJson, thumbsJson, log);
 

@@ -2,11 +2,6 @@
 
 namespace Pics2Json
 {
-  /*
-   * galleryName: Djala
-   * rootGalleryFolder: C:\projects\gallery\
-   * webPath: http://www.milosev.com/gallery/
-   */
   public class GallerySettingsElement : ConfigurationElement
   {
     [ConfigurationProperty("galleryName", IsKey = true, IsRequired = true)]
@@ -84,6 +79,45 @@ namespace Pics2Json
       set
       {
         base["ogImage"] = value;
+      }
+    }
+
+    [ConfigurationProperty("zoom", IsKey = true, IsRequired = true)]
+    public string Zoom
+    {
+      get
+      {
+        return (string)base["zoom"];
+      }
+      set
+      {
+        base["zoom"] = value;
+      }
+    }
+
+    [ConfigurationProperty("joomlaThumbsPath", IsKey = true, IsRequired = true)]
+    public string JoomlaThumbsPath
+    {
+      get
+      {
+        return (string)base["joomlaThumbsPath"];
+      }
+      set
+      {
+        base["joomlaThumbsPath"] = value;
+      }
+    }
+
+    [ConfigurationProperty("joomlaImgSrcPath", IsKey = true, IsRequired = true)]
+    public string JoomlaImgSrcPath
+    {
+      get
+      {
+        return (string)base["joomlaImgSrcPath"];
+      }
+      set
+      {
+        base["joomlaImgSrcPath"] = value;
       }
     }
   }

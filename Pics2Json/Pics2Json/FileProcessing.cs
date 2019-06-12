@@ -37,19 +37,8 @@ namespace Pics2Json
       string[] subdirectoryEntries = System.IO.Directory.GetDirectories(targetDirectory);
       foreach (string subdirectory in subdirectoryEntries)
       {
-        if (subdirectory.ToLower().Contains("travelbuddies"))
-        {
-          Debug.WriteLine("hier");
-        }
-
-        if (!string.IsNullOrWhiteSpace(subdirectoryName))
-        {
-          Debug.WriteLine("hier");
-        }
-
         string[] directoryNamesInPath = subdirectory.Split('\\');
         subdirectoryName = Path.Combine(subdirectoryName, directoryNamesInPath[directoryNamesInPath.Length - 1]);
-        //subdirectoryName = ;
         ProcessDirectory(galleryName, subdirectory, webPath, picsJson, thumbsJson, log, subdirectoryName);
       }
     }
@@ -82,8 +71,6 @@ namespace Pics2Json
         string jsonPicsPath = $"..{picsPath}{Path.GetFileName(path)}";
         string jsonThumbsPath = $"..{thumbsPath}{Path.GetFileName(path)}";
 
-        //string picsPath = 
-
         if (!webPath.EndsWith("/"))
         {
           webPath = webPath + '/';
@@ -98,15 +85,6 @@ namespace Pics2Json
 
           webPath = webPath + subdirectoryName;
         }
-
-        //string picsPath = $"{webPath}pics/";
-        //string thumbsPath = $"{webPath}thumbs/";
-
-        //Uri picsUri = new Uri(picsPath);
-        //Uri mainPicsUri = new Uri(picsUri, Path.GetFileName(path));
-
-        //Uri thumbsUri = new Uri(thumbsPath);
-        //Uri mainThumbsUri = new Uri(thumbsUri, Path.GetFileName(path));
 
         if (!(location is null))
         {
@@ -171,6 +149,9 @@ namespace Pics2Json
       , string ogDescription
       , string ogImage
       , string webPath
+      , string zoom
+      , string joomlaThumbsPath
+      , string joomlaImgSrcPath
       , Log log
     )
     {
@@ -183,10 +164,15 @@ namespace Pics2Json
       ReplaceHtml("/*ogDescription*/", ogDescription, "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*ogImage*/", $"{webPath}/{ogImage}", "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*ogUrl*/", $"{webPath}/www/index.html", "index.html", wwwFolder, wwwFolder, log);
-      ReplaceHtml("/*picsJson*/", $"{galleryName}", "thumbnails.js", "script", scriptsFolder, log);
-      ReplaceHtml("/*picsJson*/", $"{galleryName}", "pics2maps.js", "script", scriptsFolder, log);
+      ReplaceHtml("/*picsJson*/", galleryName, "thumbnails.js", "script", scriptsFolder, log);
+      ReplaceHtml("/*picsJson*/", galleryName, "pics2maps.js", "script", scriptsFolder, log);
+      ReplaceHtml("/*zoom*/", zoom, "pics2maps.js", wwwFolder + "\\" + "script", scriptsFolder, log);
 
-      ReplaceHtml("/*galleryName*/", galleryName, "joomlaPreview.html", string.Empty, wwwFolder, log);
+      ReplaceHtml("/*ogTitle*/", ogTitle, "joomlaPreview.html", string.Empty, wwwFolder, log);
+      ReplaceHtml("/*galleryName*/", galleryName, "joomlaPreview.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*joomlaThumbsPath*/", joomlaThumbsPath, "joomlaPreview.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*joomlaImgSrcPath*/", joomlaImgSrcPath, "joomlaPreview.html", wwwFolder, wwwFolder, log);
+      ReplaceHtml("/*ogImage*/", ogImage, "joomlaPreview.html", wwwFolder, wwwFolder, log);
 
       CopyFile("jquery-3.3.1.js", "lib", wwwFolder, log);
       CopyFile("index.css", "css", wwwFolder, log);
