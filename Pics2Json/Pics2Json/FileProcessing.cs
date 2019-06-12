@@ -164,7 +164,10 @@ namespace Pics2Json
       ReplaceHtml("/*ogDescription*/", ogDescription, "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*ogImage*/", $"{webPath}/{ogImage}", "index.html", wwwFolder, wwwFolder, log);
       ReplaceHtml("/*ogUrl*/", $"{webPath}/www/index.html", "index.html", wwwFolder, wwwFolder, log);
+
       ReplaceHtml("/*picsJson*/", galleryName, "thumbnails.js", "script", scriptsFolder, log);
+      ReplaceHtml("/*zoom*/", zoom, "thumbnails.js", wwwFolder + "\\" + "script", scriptsFolder, log);
+
       ReplaceHtml("/*picsJson*/", galleryName, "pics2maps.js", "script", scriptsFolder, log);
       ReplaceHtml("/*zoom*/", zoom, "pics2maps.js", wwwFolder + "\\" + "script", scriptsFolder, log);
 

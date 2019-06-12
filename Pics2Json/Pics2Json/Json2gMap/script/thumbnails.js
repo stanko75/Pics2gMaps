@@ -18,7 +18,7 @@
             thumbs.on('mouseout', '#' + key, function () {
                 if (!clicked) {
                     $('#' + key).css("border", "");
-                    ns.map.setZoom(15);
+                    ns.map.setZoom(/*zoom*/);
                 }
             });
             thumbs.on('click', '#' + key, function () {
@@ -40,6 +40,6 @@
                 }
             });
         });
-        ns.map.setZoom(15);
+        ns.map.setZoom(/*zoom*/);
     });
 })(window.milosev);
