@@ -1,3 +1,5 @@
+Extracts GPS position from images, save it to JSON and display them on google maps.
+
 App.Config should look like this:
 
 ```xml
@@ -81,3 +83,12 @@ App.Config should look like this:
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1" />
   </startup>
 </configuration>
+```
+Folder structure should look like:
+
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
+
+Notice that all galleries are under allWithPics, and easter2019 and vacation2018 are under travelBuddies. That means that galleries easter2019 and vacation2018 will be merged in travelBuddies gallery, and all galleris will be merged under allWithPics.
+
+For time being my personal web site is hardcoded almost everywhere in solution.
