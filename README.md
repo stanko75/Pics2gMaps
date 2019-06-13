@@ -96,6 +96,9 @@ For time being my personal web site is hardcoded almost everywhere in solution.
 Examples: 
 
 [Joomla!](http://milosev.com/2015-01-23-20-08-55/gallery.html)
+
 [Travel buddies](http://milosev.com/gallery/allWithPics/travelBuddies/www/index.html)
+
 [Vacation 2018](http://milosev.com/gallery/allWithPics/travelBuddies/vacation2018/www/index.html)
+
 [Easter 2019](http://milosev.com/2015-01-23-20-08-55/gallery/523-easter-2019.html)
