@@ -86,7 +86,7 @@ App.Config should look like this:
 ```
 Folder structure should look like:
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](https://github.com/stanko75/Pics2gMaps/blob/master/folderStructure.png "Folder structure")
 
 
 Notice that all galleries are under allWithPics, and easter2019 and vacation2018 are under travelBuddies. That means that galleries easter2019 and vacation2018 will be merged in travelBuddies gallery, and all galleris will be merged under allWithPics.
