@@ -1,9 +1,24 @@
 (function (ns) {
     /*globals google, $*/
     "use strict";
+
+    function resizeMarkerIcon(size, fileName) {
+        ns.markers.forEach(function (marker) {
+            if (marker.title.replace(/^.*[\\\/]/, '') == fileName.replace(/^.*[\\\/]/, '')) {
+                marker.setIcon({
+                    url: fileName,
+                    scaledSize: new google.maps.Size(size, size)
+                });
+            } else {
+                marker.setIcon(null);
+            }
+        })
+    }
+
     $.getJSON("/*picsJson*/Thumbs.json", function (data) {
         var thumbs,
-            clicked;
+            clicked,
+            picsLatLng;
         clicked = false;
         thumbs = $('#thumbnails');
         data.forEach(function (val, key) {
@@ -12,13 +27,16 @@
                 if (!clicked) {
                     $('#' + key).css("border", "14px solid #333");
                     ns.map.setZoom(20);
-                    ns.map.setCenter(new google.maps.LatLng(val.Latitude, val.Longitude), 13);
+                    picsLatLng = new google.maps.LatLng(val.Latitude, val.Longitude);
+                    ns.map.setCenter(picsLatLng, 13);
+                    resizeMarkerIcon(70, val.FileName);
                 }
             });
             thumbs.on('mouseout', '#' + key, function () {
                 if (!clicked) {
                     $('#' + key).css("border", "");
                     ns.map.setZoom(/*zoom*/);
+                    resizeMarkerIcon(30, "");
                 }
             });
             thumbs.on('click', '#' + key, function () {
@@ -27,6 +45,7 @@
                     clicked = false;
                     $('#' + key).css("border", "");
                     ns.map.setZoom(15);
+                    resizeMarkerIcon(30, "");
                 }
                 else {
                     clicked = true;
@@ -36,7 +55,9 @@
                     $('img[style*="border: 14px"]').css("border", "");
                     $('#' + key).css("border", "14px solid #333");
                     ns.map.setZoom(20);
-                    ns.map.setCenter(new google.maps.LatLng(val.Latitude, val.Longitude), 13);
+                    picsLatLng = new google.maps.LatLng(val.Latitude, val.Longitude);
+                    ns.map.setCenter(picsLatLng, 13);
+                    resizeMarkerIcon(70, val.FileName);
                 }
             });
         });

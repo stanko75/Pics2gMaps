@@ -1,6 +1,9 @@
 (function (ns) {
     /*globals google, $*/
     "use strict";
+
+    var markers = [];
+
     $.getJSON("/*picsJson*/.json", function (data) {
         data.forEach(function (file) {
 
@@ -18,6 +21,8 @@
                 marker.addListener('click', function () {
                     window.open(marker.url, "_target");
                 });
+
+                markers.push(marker);
 
                 bounds.extend(picsLatLng);
                 ns.map.fitBounds(bounds);
@@ -39,8 +44,10 @@
                     if (typeof google !== 'object') {
                         location.reload();
                     }
-                }, 1000);
+                }, 3000);
             }
         });
+    }).done(function () {
+        ns.markers = markers;
     });
 })(window.milosev);
