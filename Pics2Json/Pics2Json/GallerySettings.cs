@@ -120,6 +120,19 @@ namespace Pics2Json
         base["joomlaImgSrcPath"] = value;
       }
     }
+
+    [ConfigurationProperty("resizeImages", IsKey = true, IsRequired = false, DefaultValue = true)]
+    public bool ResizeImages
+    {
+      get
+      {
+        return (bool)base["resizeImages"];
+      }
+      set
+      {
+        base["resizeImages"] = value;
+      }
+    }
   }
 
   public class GallerySettingsElementCollection : ConfigurationElementCollection

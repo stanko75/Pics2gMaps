@@ -21,7 +21,14 @@ namespace Pics2Json
       public double Longitude { get; set; }
     }
 
-    public void ProcessDirectory(string galleryName, string targetDirectory, string webPath, List<MyObjectInJson> picsJson, List<MyObjectInJson> thumbsJson, Log log, string subdirectoryName = "")
+    public void ProcessDirectory(string galleryName
+      , string targetDirectory
+      , string webPath
+      , List<MyObjectInJson> picsJson
+      , List<MyObjectInJson> thumbsJson
+      , bool resizeImages
+      , Log log
+      , string subdirectoryName = "")
     {
       // Process the list of files found in the directory.
       string picsFolder = Path.Combine(targetDirectory, "pics");
@@ -30,7 +37,7 @@ namespace Pics2Json
       {
         string[] fileEntries = System.IO.Directory.GetFiles(picsFolder);
         foreach (string fileName in fileEntries)
-          ProcessFile(galleryName, fileName, webPath, thumbnailsFolder, picsJson, thumbsJson, log, subdirectoryName);
+          ProcessFile(galleryName, fileName, webPath, thumbnailsFolder, picsJson, thumbsJson, resizeImages, log, subdirectoryName);
       }
 
       // Recurse into subdirectories of this directory.
@@ -39,19 +46,28 @@ namespace Pics2Json
       {
         string[] directoryNamesInPath = subdirectory.Split('\\');
         subdirectoryName = Path.Combine(subdirectoryName, directoryNamesInPath[directoryNamesInPath.Length - 1]);
-        ProcessDirectory(galleryName, subdirectory, webPath, picsJson, thumbsJson, log, subdirectoryName);
+        ProcessDirectory(galleryName, subdirectory, webPath, picsJson, thumbsJson, resizeImages, log, subdirectoryName);
       }
     }
 
     // Insert logic for processing found files here.
-    public static void ProcessFile(string galleryName, string path, string webPath, string strThumbnailsFolder, List<MyObjectInJson> picsJson, List<MyObjectInJson> thumbsJson, Log log, string subdirectoryName)
+    public static void ProcessFile(string galleryName
+      , string path
+      , string webPath
+      , string strThumbnailsFolder
+      , List<MyObjectInJson> picsJson
+      , List<MyObjectInJson> thumbsJson
+      , bool resizeImages
+      , Log log
+      , string subdirectoryName)
     {
       if (!System.IO.Directory.Exists(strThumbnailsFolder))
         System.IO.Directory.CreateDirectory(strThumbnailsFolder);
 
       ImagesProcessing imagesProcessing = new ImagesProcessing();
 
-      imagesProcessing.ResizeImage(path, Path.Combine(strThumbnailsFolder, Path.GetFileName(path)), 200, 200);
+      if (resizeImages)
+        imagesProcessing.ResizeImage(path, Path.Combine(strThumbnailsFolder, Path.GetFileName(path)), 200, 200);
 
       try
       {

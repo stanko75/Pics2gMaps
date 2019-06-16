@@ -39,6 +39,7 @@ namespace ConsoleApp1
             string zoom = setting.Zoom;
             string joomlaThumbsPath = setting.JoomlaThumbsPath;
             string joomlaImgSrcPath = setting.JoomlaImgSrcPath;
+            bool resizeImages = setting.ResizeImages;
 
             string rootGalleryFolderWithGalleryName = Path.Combine(rootGalleryFolder, galleryName);
 
@@ -49,7 +50,7 @@ namespace ConsoleApp1
 
             fileProcessing.PrepareTemplates(wwwFolder, galleryName, ogTitle, ogDescription, ogImage, webPath, zoom, joomlaThumbsPath, joomlaImgSrcPath, log);
 
-            fileProcessing.ProcessDirectory(galleryName, rootGalleryFolderWithGalleryName, webPath, picsJson, thumbsJson, log);
+            fileProcessing.ProcessDirectory(galleryName, rootGalleryFolderWithGalleryName, webPath, picsJson, thumbsJson, resizeImages, log);
 
             string json = jsonSerialiser.Serialize(picsJson);
 
