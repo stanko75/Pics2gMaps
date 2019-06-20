@@ -167,7 +167,7 @@ namespace Pics2Json
   {
     [ConfigurationProperty("settings")]
     [ConfigurationCollection(typeof(GallerySettingsElementCollection))]
-    public GallerySettingsElementCollection MilosevBlogInstances
+    public GallerySettingsElementCollection GallerySettingsInstances
     {
       get
       {

@@ -28,14 +28,17 @@ namespace Pics2Json
       , List<MyObjectInJson> thumbsJson
       , bool resizeImages
       , Log log
-      , string subdirectoryName = "")
+      , string subdirectoryName = ""
+      , bool isAll = false)
     {
       // Process the list of files found in the directory.
+
       string picsFolder = Path.Combine(targetDirectory, "pics");
       string thumbnailsFolder = Path.Combine(targetDirectory, "thumbs");
-      if (System.IO.Directory.Exists(picsFolder))
+      if (!isAll && System.IO.Directory.Exists(picsFolder))
       {
-        string[] fileEntries = System.IO.Directory.GetFiles(picsFolder);
+        string getFilesFrom = isAll ?  targetDirectory : picsFolder;
+        string[] fileEntries = System.IO.Directory.GetFiles(getFilesFrom);
         foreach (string fileName in fileEntries)
           ProcessFile(galleryName, fileName, webPath, thumbnailsFolder, picsJson, thumbsJson, resizeImages, log, subdirectoryName);
       }
@@ -59,10 +62,14 @@ namespace Pics2Json
       , List<MyObjectInJson> thumbsJson
       , bool resizeImages
       , Log log
-      , string subdirectoryName)
+      , string subdirectoryName
+      , bool isAll = false)
     {
-      if (!System.IO.Directory.Exists(strThumbnailsFolder))
-        System.IO.Directory.CreateDirectory(strThumbnailsFolder);
+      if (!isAll)
+      {
+        if (!System.IO.Directory.Exists(strThumbnailsFolder))
+          System.IO.Directory.CreateDirectory(strThumbnailsFolder);
+      }
 
       ImagesProcessing imagesProcessing = new ImagesProcessing();
 
@@ -77,35 +84,45 @@ namespace Pics2Json
 
         GeoLocation location = gps?.GetGeoLocation();
 
-        int indexOfGalleryNameInPath = path.IndexOf(galleryName);
-        indexOfGalleryNameInPath = indexOfGalleryNameInPath + galleryName.Length;
-        string relativeSysPathFileName = path.Substring(indexOfGalleryNameInPath, path.Length - indexOfGalleryNameInPath);
-        relativeSysPathFileName = relativeSysPathFileName.Substring(0, relativeSysPathFileName.LastIndexOf(@"\") + 1);
-
-        string picsPath = relativeSysPathFileName.Replace(@"\", "/");
-        string thumbsPath = picsPath.Substring(0, picsPath.IndexOf("pics")) + "thumbs/";
-        string jsonPicsPath = $"..{picsPath}{Path.GetFileName(path)}";
-        string jsonThumbsPath = $"..{thumbsPath}{Path.GetFileName(path)}";
-
-        if (!webPath.EndsWith("/"))
-        {
-          webPath = webPath + '/';
-        }
-
-        if (!string.IsNullOrWhiteSpace(subdirectoryName))
-        {
-          if (!subdirectoryName.EndsWith("/"))
-          {
-            subdirectoryName = subdirectoryName + '/';
-          }
-
-          webPath = webPath + subdirectoryName;
-        }
-
         if (!(location is null))
         {
-          picsJson.Add(new MyObjectInJson { FileName = jsonPicsPath, Latitude = location.Latitude, Longitude = location.Longitude });
+          int indexOfGalleryNameInPath = path.IndexOf(galleryName);
+          indexOfGalleryNameInPath = indexOfGalleryNameInPath + galleryName.Length;
+          string relativeSysPathFileName = path.Substring(indexOfGalleryNameInPath, path.Length - indexOfGalleryNameInPath);
+          relativeSysPathFileName = relativeSysPathFileName.Substring(0, relativeSysPathFileName.LastIndexOf(@"\") + 1);
+
+          string picsPath = relativeSysPathFileName.Replace(@"\", "/");
+
+          string thumbsPath = string.Empty;
+          if (picsPath.IndexOf("pics") > 0)
+          {
+            thumbsPath = picsPath.Substring(0, picsPath.IndexOf("pics")) + "thumbs/";
+          }
+
+          string jsonPicsPath = $"..{picsPath}{Path.GetFileName(path)}";
+          string jsonThumbsPath = $"..{thumbsPath}{Path.GetFileName(path)}";
+
+          if (!webPath.EndsWith("/"))
+          {
+            webPath = webPath + '/';
+          }
+
+          if (!string.IsNullOrWhiteSpace(subdirectoryName))
+          {
+            if (!subdirectoryName.EndsWith("/"))
+            {
+              subdirectoryName = subdirectoryName + '/';
+            }
+
+            webPath = webPath + subdirectoryName;
+          }
+
+          picsJson.Add(new MyObjectInJson { FileName = isAll ? path : jsonPicsPath, Latitude = location.Latitude, Longitude = location.Longitude });
           thumbsJson.Add(new MyObjectInJson { FileName = jsonThumbsPath, Latitude = location.Latitude, Longitude = location.Longitude });
+        }
+        else
+        {
+          log.WriteLog($"Location is null.");
         }
 
         log.WriteLog($"Processed file '{path}'.");

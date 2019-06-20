@@ -56,6 +56,7 @@
     <Compile Include="GallerySettings.cs" />
     <Compile Include="ImagesProcessing.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="MergedGalleriesSettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

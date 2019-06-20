@@ -2,10 +2,9 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
-using Directory = System.IO.Directory;
-using System.Collections.Specialized;
 using System.Configuration;
 using Pics2Json;
+using System.Diagnostics;
 
 //using System.Object;
 
@@ -20,13 +19,13 @@ namespace ConsoleApp1
 
       try
       {
-        GallerySettingsConfig galeries = (GallerySettingsConfig)ConfigurationManager.GetSection("galeries");
+        GallerySettingsConfig galleries = (GallerySettingsConfig)ConfigurationManager.GetSection("Galleries");
         JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
         FileProcessing fileProcessing = new FileProcessing();
 
-        if (!(galeries is null))
+        if (!(galleries is null))
         {
-          foreach (GallerySettingsElement setting in galeries.MilosevBlogInstances)
+          foreach (GallerySettingsElement setting in galleries.GallerySettingsInstances)
           {
             List<FileProcessing.MyObjectInJson> picsJson = new List<FileProcessing.MyObjectInJson>();
             List<FileProcessing.MyObjectInJson> thumbsJson = new List<FileProcessing.MyObjectInJson>();
@@ -60,6 +59,45 @@ namespace ConsoleApp1
             File.WriteAllText(Path.Combine(wwwFolder, jsonThumbsFilename), json);
           }
         }
+
+        MergedGalleriesSettingsConfig mergedGalleries = (MergedGalleriesSettingsConfig)ConfigurationManager.GetSection("mergedGalleries");
+        /*
+        JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
+        FileProcessing fileProcessing = new FileProcessing();
+        */
+
+        if (!(mergedGalleries is null))
+        {
+          List<FileProcessing.MyObjectInJson> picsJson = new List<FileProcessing.MyObjectInJson>();
+          List<FileProcessing.MyObjectInJson> thumbsJson = new List<FileProcessing.MyObjectInJson>();
+
+          foreach (MergedGalleriesSettingsElement setting in mergedGalleries.MergedGalleriesSettingsInstances)
+          {
+            fileProcessing.ProcessDirectory("all"
+              , setting.Folder
+              , "milosev.com"
+              , picsJson
+              , thumbsJson
+              , false
+              , log
+              , isAll: true
+            );
+          }
+
+          string json = jsonSerialiser.Serialize(picsJson);
+          File.WriteAllText(Path.Combine(@"C:\projects\gallery\all\all.json"), json);
+          fileProcessing.PrepareTemplates(@"C:\projects\gallery\all"
+            , "all"
+            , "List of all places"
+            , "List of all places without images"
+            , string.Empty
+            , "www.milosev.com"
+            , "2"
+            , string.Empty
+            , string.Empty
+            , log);
+        }
+
       }
       catch (Exception e)
       {
