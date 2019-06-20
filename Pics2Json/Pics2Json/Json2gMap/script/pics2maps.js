@@ -40,11 +40,11 @@
             }
             catch (e) {
                 console.log(e);
-                setTimeout(function () {
-                    if (typeof google !== 'object') {
+                if (typeof google !== 'object') {
+                    setTimeout(function () {
                         location.reload();
-                    }
-                }, 3000);
+                    }, 3000);
+                }
             }
         });
     }).done(function () {

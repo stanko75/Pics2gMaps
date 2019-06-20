@@ -12,7 +12,7 @@
             } else {
                 marker.setIcon(null);
             }
-        })
+        });
     }
 
     $.getJSON("/*picsJson*/Thumbs.json", function (data) {
