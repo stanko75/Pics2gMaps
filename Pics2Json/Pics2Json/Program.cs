@@ -68,12 +68,13 @@ namespace ConsoleApp1
 
         if (!(mergedGalleries is null))
         {
-          List<FileProcessing.MyObjectInJson> picsJson = new List<FileProcessing.MyObjectInJson>();
-          List<FileProcessing.MyObjectInJson> thumbsJson = new List<FileProcessing.MyObjectInJson>();
 
           foreach (MergedGalleriesSettingsElement setting in mergedGalleries.MergedGalleriesSettingsInstances)
           {
-            fileProcessing.ProcessDirectory("all"
+            List<FileProcessing.MyObjectInJson> picsJson = new List<FileProcessing.MyObjectInJson>();
+            List<FileProcessing.MyObjectInJson> thumbsJson = new List<FileProcessing.MyObjectInJson>();
+
+            fileProcessing.ProcessDirectory(setting.GalleryName
               , setting.Folder
               , "milosev.com"
               , picsJson
@@ -82,22 +83,25 @@ namespace ConsoleApp1
               , log
               , isAll: true
             );
+
+            if (!System.IO.Directory.Exists(setting.GalleryPath))
+              System.IO.Directory.CreateDirectory(setting.GalleryPath);
+
+            string json = jsonSerialiser.Serialize(picsJson);
+            File.WriteAllText(Path.Combine(setting.GalleryPath, setting.GalleryName + ".json"), json);
+
+            fileProcessing.PrepareTemplates(setting.GalleryPath
+              , setting.GalleryName
+              , "List of all places"
+              , "List of all places without images"
+              , string.Empty
+              , "www.milosev.com"
+              , "2"
+              , string.Empty
+              , string.Empty
+              , log);
           }
-
-          string json = jsonSerialiser.Serialize(picsJson);
-          File.WriteAllText(Path.Combine(@"C:\projects\gallery\all\all.json"), json);
-          fileProcessing.PrepareTemplates(@"C:\projects\gallery\all"
-            , "all"
-            , "List of all places"
-            , "List of all places without images"
-            , string.Empty
-            , "www.milosev.com"
-            , "2"
-            , string.Empty
-            , string.Empty
-            , log);
         }
-
       }
       catch (Exception e)
       {

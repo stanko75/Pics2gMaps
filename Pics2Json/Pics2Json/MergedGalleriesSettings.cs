@@ -17,6 +17,32 @@ namespace Pics2Json
       }
     }
 
+    [ConfigurationProperty("galleryName", IsKey = true, IsRequired = true)]
+    public string GalleryName
+    {
+      get
+      {
+        return (string)base["galleryName"];
+      }
+      set
+      {
+        base["galleryName"] = value;
+      }
+    }
+
+    [ConfigurationProperty("galleryPath", IsKey = true, IsRequired = true)]
+    public string GalleryPath
+    {
+      get
+      {
+        return (string)base["galleryPath"];
+      }
+      set
+      {
+        base["galleryPath"] = value;
+      }
+    }
+
   }
   public class MergedGalleriesSettingsConfig : ConfigurationSection
   {

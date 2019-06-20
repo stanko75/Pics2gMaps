@@ -35,12 +35,12 @@ namespace Pics2Json
 
       string picsFolder = Path.Combine(targetDirectory, "pics");
       string thumbnailsFolder = Path.Combine(targetDirectory, "thumbs");
-      if (!isAll && System.IO.Directory.Exists(picsFolder))
+      if (isAll || System.IO.Directory.Exists(picsFolder))
       {
         string getFilesFrom = isAll ?  targetDirectory : picsFolder;
         string[] fileEntries = System.IO.Directory.GetFiles(getFilesFrom);
         foreach (string fileName in fileEntries)
-          ProcessFile(galleryName, fileName, webPath, thumbnailsFolder, picsJson, thumbsJson, resizeImages, log, subdirectoryName);
+          ProcessFile(galleryName, fileName, webPath, thumbnailsFolder, picsJson, thumbsJson, resizeImages, log, subdirectoryName, isAll);
       }
 
       // Recurse into subdirectories of this directory.
@@ -49,7 +49,7 @@ namespace Pics2Json
       {
         string[] directoryNamesInPath = subdirectory.Split('\\');
         subdirectoryName = Path.Combine(subdirectoryName, directoryNamesInPath[directoryNamesInPath.Length - 1]);
-        ProcessDirectory(galleryName, subdirectory, webPath, picsJson, thumbsJson, resizeImages, log, subdirectoryName);
+        ProcessDirectory(galleryName, subdirectory, webPath, picsJson, thumbsJson, resizeImages, log, subdirectoryName, isAll);
       }
     }
 
