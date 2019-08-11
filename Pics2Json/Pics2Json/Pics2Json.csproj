@@ -33,8 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MetadataExtractor, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetadataExtractor.2.0.0\lib\net45\MetadataExtractor.dll</HintPath>
+    <Reference Include="MetadataExtractor, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetadataExtractor.2.1.0\lib\net45\MetadataExtractor.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -64,10 +64,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Json2gMap\myJosn.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Json2gMap\css\index.css">
