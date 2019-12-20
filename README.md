@@ -69,6 +69,7 @@ App.Config should look like this:
            ogDescription="List of all places which are published."
            ogImage="travelBuddies/easter2019/thumbs/20190414_161631.jpg"
            zoom="5"
+		   resizeImages="false"
            joomlaThumbsPath="/gallery/allWithPics/www/allWithPicsThumbs.json"
            joomlaImgSrcPath="/gallery/allWithPics/www/"
       />
@@ -84,6 +85,9 @@ App.Config should look like this:
   </startup>
 </configuration>
 ```
+
+Notice **resizeImages="false"** in allWithPics settings.
+
 Folder structure should look like:
 
 ![alt text](https://github.com/stanko75/Pics2gMaps/blob/master/folderStructure.png "Folder structure")
