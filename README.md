@@ -106,3 +106,32 @@ Examples:
 [Vacation 2018](http://milosev.com/gallery/allWithPics/travelBuddies/vacation2018/www/index.html)
 
 [Easter 2019](http://milosev.com/2015-01-23-20-08-55/gallery/523-easter-2019.html)
+
+If you want to generate JSON of all pictures, you can do with following settings:
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+
+  <configSections>
+    <section name="mergedGalleries" type="Pics2Json.MergedGalleriesSettingsConfig, Pics2Json"></section>
+  </configSections>
+
+ 
+  <mergedGalleries>
+    <settings>
+      <add galleryName="folderF" folder="F:\slike" galleryPath="C:\projects\gallery\folderF" />
+      <add galleryName="folderE" folder="E:\slike" galleryPath="C:\projects\gallery\folderE" />
+      <add galleryName="folderG" folder="G:\Slike" galleryPath="C:\projects\gallery\folderG" />
+    </settings>
+  </mergedGalleries>
+
+  <appSettings>
+    <add key="gapikey" value="myApiKey" />
+  </appSettings>
+
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1" />
+  </startup>
+</configuration>
+```
