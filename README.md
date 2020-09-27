@@ -7,10 +7,10 @@ App.Config should look like this:
 <configuration>
 
   <configSections>
-    <section name="galeries" type="Pics2Json.GallerySettingsConfig, Pics2Json"></section>
+    <section name="galleries" type="Pics2Json.GallerySettingsConfig, Pics2Json"></section>
   </configSections>
 
-  <galeries>
+  <galleries>
     <settings>
       <add galleryName="djala"
            rootGalleryFolder="C:\projects\gallery\allWithPics"
@@ -74,7 +74,7 @@ App.Config should look like this:
            joomlaImgSrcPath="/gallery/allWithPics/www/"
       />
     </settings>
-  </galeries>
+  </galleries>
 
   <appSettings>
     <add key="gapikey" value="myApiKey" />

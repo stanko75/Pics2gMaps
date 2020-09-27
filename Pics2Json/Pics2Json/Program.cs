@@ -19,7 +19,7 @@ namespace ConsoleApp1
 
       try
       {
-        GallerySettingsConfig galleries = (GallerySettingsConfig)ConfigurationManager.GetSection("Galleries");
+        GallerySettingsConfig galleries = (GallerySettingsConfig)ConfigurationManager.GetSection("galleries");
         JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
         FileProcessing fileProcessing = new FileProcessing();
 
