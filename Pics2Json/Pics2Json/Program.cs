@@ -87,8 +87,28 @@ namespace ConsoleApp1
             if (!System.IO.Directory.Exists(setting.GalleryPath))
               System.IO.Directory.CreateDirectory(setting.GalleryPath);
 
-            string json = jsonSerialiser.Serialize(picsJson);
-            File.WriteAllText(Path.Combine(setting.GalleryPath, setting.GalleryName + ".json"), json);
+            //jsonSerialiser.MaxJsonLength
+
+            int maxLength = 10000;
+
+            if (picsJson.Count > maxLength)
+            {
+              int range = 0;
+              do
+              {
+                range = range + maxLength;
+                int rangeIndex = range - maxLength;
+                int rangeCount = range < picsJson.Count ? maxLength : picsJson.Count - rangeIndex;
+                List<FileProcessing.MyObjectInJson> picsJsonRange = picsJson.GetRange(rangeIndex, rangeCount);
+                string json = jsonSerialiser.Serialize(picsJsonRange);
+                File.WriteAllText(Path.Combine(setting.GalleryPath, $"{setting.GalleryName}From{rangeIndex}to{rangeIndex + rangeCount}.json"), json);
+              } while (range < picsJson.Count);
+            }
+            else
+            {
+              string json = jsonSerialiser.Serialize(picsJson);
+              File.WriteAllText(Path.Combine(setting.GalleryPath, setting.GalleryName + ".json"), json);
+            }
 
             fileProcessing.PrepareTemplates(setting.GalleryPath
               , setting.GalleryName

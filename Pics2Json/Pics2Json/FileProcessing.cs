@@ -125,7 +125,7 @@ namespace Pics2Json
           log.WriteLog($"Location is null.");
         }
 
-        log.WriteLog($"Processed file '{path}'.");
+        log.WriteLog($"Processed file '{path}', count: {picsJson.Count}.");
       }
       catch (Exception e)
       {
