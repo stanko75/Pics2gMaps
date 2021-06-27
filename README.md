@@ -99,7 +99,7 @@ For time being my personal web site is hardcoded almost everywhere in solution.
 
 Examples: 
 
-[Joomla!](http://milosev.com/2015-01-23-20-08-55/gallery.html)
+[Joomla!](http://milosev.com/2015-01-23-20-08-55/gallery)
 
 [Travel buddies](http://milosev.com/gallery/allWithPics/travelBuddies/www/index.html)
 
