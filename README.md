@@ -105,7 +105,7 @@ Examples:
 
 [Vacation 2018](http://milosev.com/gallery/allWithPics/travelBuddies/vacation2018/www/index.html)
 
-[Easter 2019](http://milosev.com/2015-01-23-20-08-55/gallery/523-easter-2019.html)
+[Easter 2019](http://milosev.com/2015-01-23-20-08-55/gallery/easter-2019)
 
 If you want to generate JSON of all pictures, you can do with following settings:
 
